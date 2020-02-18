@@ -1,9 +1,14 @@
 ﻿<Application x:Class="WpfSamples.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WpfSamples"
+             xmlns:local="clr-namespace:WpfSamples.Attached_Behavior.View"
+             xmlns:vms="clr-namespace:WpfSamples.Attached_Behavior.ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- This declares an instance of DialogBox_View in the resource dictionary.
+             With Shared == False, a new instance will be created each time we request the resource,
+             such as via Application.Current.TryFindResource(). -->
+        <local:DialogBox_View x:Key="{x:Type vms:DialogBox_VM}" x:Shared="False"/>
+        <local:SelectFileDialogBoxShim x:Key="{x:Type vms:SelectFileDialogBox_VM}" x:Shared="False"/>
     </Application.Resources>
 </Application>

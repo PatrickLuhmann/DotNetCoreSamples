@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Wpf Samples" Height="450" Width="800">
     <Grid>
-
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="Here are the available samples"/>
+            <Button Margin="5" Click="Button_Click">Attached Behaviors (Including Dialog Boxes)</Button>
+        </StackPanel>
     </Grid>
 </Window>

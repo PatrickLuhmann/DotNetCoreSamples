@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfSamples.Attached_Behavior.View.DialogBox_View"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSamples.Attached_Behavior.View"
+        xmlns:vms="clr-namespace:WpfSamples.Attached_Behavior.ViewModel"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vms:DialogBox_VM, IsDesignTimeCreatable=True}"
+        Title="DialogBox_View" Height="450" Width="800">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <TextBlock>This is DialogBox_View</TextBlock>
+            <TextBlock>
+                <Run Text="Salutation:"/>
+                <Run Text="{Binding Salutation}"/>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="5" Text="Input 1:"/>
+                <TextBox Margin="5" Width="100" Text="{Binding Input1}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="5" Text="Input 2:"/>
+                <TextBox Margin="5" Width="100" Text="{Binding Input2}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Margin="5" Command="{Binding CancelCmd}" CommandParameter="{Binding}">Cancel</Button>
+                <Button Margin="5" Command="{Binding OkCmd}" CommandParameter="{Binding}">OK</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

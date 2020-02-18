@@ -1,0 +1,72 @@
+﻿<Window x:Class="WpfSamples.Attached_Behavior.View.Behaviors_View"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSamples.Attached_Behavior.View"
+        xmlns:vms="clr-namespace:WpfSamples.Attached_Behavior.ViewModel"
+        local:DialogBehavior.DialogVisible="{Binding DialogVisible}"
+        local:DialogBehavior.DialogBox="{Binding DialogBox}"
+        local:DialogBehavior.SelectFileDialogBox="{Binding SelectFileDialogBox}"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vms:Behaviors_VM, IsDesignTimeCreatable=True}"
+        Title="Behaviors View" Height="450" Width="800">
+    <Window.DataContext>
+        <vms:Behaviors_VM/>
+    </Window.DataContext>
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Salutation}"/>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <TextBlock>Search for:</TextBlock>
+            <TextBox Width="200" Text="{Binding SearchString}"/>
+            <Button Command="{Binding SearchTreeCmd}" CommandParameter="{Binding}">Find</Button>
+        </StackPanel>
+        <TreeView ItemsSource="{Binding TopLevel}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <!-- The attached behavior to bring the selected item into view. -->
+                    <Setter Property="local:TreeViewItemBehavior.IsBroughtIntoViewWhenSelected" Value="True"/>
+
+                    <!-- How to display the items in the tree view. -->
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    <Setter Property="FontWeight" Value="Normal"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="18" Text="{Binding Value1}"/>
+                        <TextBlock Text="{Binding Value2}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+            <TextBlock>This is a StackPanel[Horizontal]</TextBlock>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock>This is a StackPanel[Default]</TextBlock>
+            <Button Command="{Binding ToggleDialogCmd}" CommandParameter="{Binding}">Show Simple Custom Dialog Window</Button>
+            <Button Command="{Binding DialogBoxCmd}" CommandParameter="{Binding}">Show Custom Dialog Box</Button>
+            <Button Command="{Binding SelectFileDialogBoxCmd}" CommandParameter="{Binding}">Select File</Button>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="5">DialogVisible:</TextBlock>
+                <TextBlock Margin="5" Text="{Binding DialogVisible}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="5">Selected File:</TextBlock>
+                <TextBlock Margin="5" Text="{Binding SelectedFile}"/>
+            </StackPanel>
+            <TextBlock>
+                <Run Text="Status: "/>
+                <Run Text="{Binding DialogStatus}"/>
+            </TextBlock>
+        </StackPanel>
+    </DockPanel>
+</Window>

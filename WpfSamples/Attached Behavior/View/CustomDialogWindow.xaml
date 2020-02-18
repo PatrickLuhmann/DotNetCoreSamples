@@ -1,0 +1,12 @@
+﻿<Window x:Class="WpfSamples.Attached_Behavior.View.CustomDialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSamples.Attached_Behavior.View"
+        mc:Ignorable="d"
+        Title="CustomDialogWindow" Height="450" Width="800">
+    <Grid>
+        <TextBlock>This is CustomDialogWindow</TextBlock>
+    </Grid>
+</Window>
