@@ -30,6 +30,32 @@ namespace WpfSamples.List_Sorting.ViewModel
 				Integers.Add(rng.Next(0, 101));
 		}
 
+		private void SortIntegers(bool asc)
+		{
+			ListCollectionView lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(Integers);
+
+			if (asc)
+			{
+				if (!IntegersAscActive)
+					lcv.CustomSort = new IntegerSorter(true);
+				else
+					lcv.CustomSort = null;
+
+				IntegersAscActive = !IntegersAscActive;
+				IntegersDescActive = false;
+			}
+			else
+			{
+				if (!IntegersDescActive)
+					lcv.CustomSort = new IntegerSorter(false);
+				else
+					lcv.CustomSort = null;
+
+				IntegersDescActive = !IntegersDescActive;
+				IntegersAscActive = false;
+			}
+		}
+
 		#region Commands
 		public ICommand SortIntegersAscendingCmd { get { return new SortIntAscCommand(); } }
 		private class SortIntAscCommand : ICommand
@@ -45,19 +71,8 @@ namespace WpfSamples.List_Sorting.ViewModel
 			public void Execute(object parameter)
 			{
 				if (parameter is Sorting_VM svm)
-					svm.SortIntegersAscending();
+					svm.SortIntegers(true);
 			}
-		}
-		public void SortIntegersAscending()
-		{
-			ListCollectionView lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(Integers);
-			if (!IntegersAscActive)
-				lcv.CustomSort = new SortIntegersAscending();
-			else
-				lcv.CustomSort = null;
-
-			IntegersAscActive = !IntegersAscActive;
-			IntegersDescActive = false;
 		}
 
 		public ICommand SortIntegersDescendingCmd { get { return new SortIntDescCommand(); } }
@@ -74,19 +89,8 @@ namespace WpfSamples.List_Sorting.ViewModel
 			public void Execute(object parameter)
 			{
 				if (parameter is Sorting_VM svm)
-					svm.SortIntegersDescending();
+					svm.SortIntegers(false);
 			}
-		}
-		public void SortIntegersDescending()
-		{
-			ListCollectionView lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(Integers);
-			if (!IntegersDescActive)
-				lcv.CustomSort = new SortIntegersDescending();
-			else
-				lcv.CustomSort = null;
-
-			IntegersDescActive = !IntegersDescActive;
-			IntegersAscActive = false;
 		}
 		#endregion
 
@@ -102,35 +106,36 @@ namespace WpfSamples.List_Sorting.ViewModel
 		#endregion
 	}
 
-	public class SortIntegersAscending : IComparer
+	public class IntegerSorter : IComparer
 	{
+		private readonly bool Ascending = true;
+
 		public int Compare(object x, object y)
 		{
 			if (x is int xx && y is int yy)
 			{
-				if (xx > yy)
-					return 1;
+				if (Ascending)
+				{
+					if (xx > yy)
+						return 1;
+					else
+						return -1;
+				}
 				else
-					return -1;
+				{
+					if (xx < yy)
+						return 1;
+					else
+						return -1;
+				}
 			}
 
 			throw new ArgumentException("This Compare requires two integers.");
 		}
-	}
 
-	public class SortIntegersDescending : IComparer
-	{
-		public int Compare(object x, object y)
+		public IntegerSorter(bool asc)
 		{
-			if (x is int xx && y is int yy)
-			{
-				if (xx < yy)
-					return 1;
-				else
-					return -1;
-			}
-
-			throw new ArgumentException("This Compare requires two integers.");
+			Ascending = asc;
 		}
 	}
 }
