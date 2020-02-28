@@ -13,12 +13,20 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="{Binding Salutation}"/>
-        <ListView Grid.Row="1" ItemsSource="{Binding Integers}"/>
+        <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Integers}"/>
+        <ListView Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Integers}"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Margin="5" Command="{Binding SortIntegersAscendingCmd}" CommandParameter="{Binding}">Sort Asc</Button>
+            <Button Margin="5" Command="{Binding SortIntegersDescendingCmd}" CommandParameter="{Binding}">Sort Desc</Button>
+            <Button Margin="5">Only Odd</Button>
+        </StackPanel>
     </Grid>
 </Window>
