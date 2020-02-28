@@ -92,6 +92,34 @@ namespace WpfSamples.List_Sorting.ViewModel
 					svm.SortIntegers(false);
 			}
 		}
+
+		public ICommand PocSortIntegersCmd { get { return new SortIntCommand(this); } }
+		private class SortIntCommand : ICommand
+		{
+			private readonly Sorting_VM Svm = null;
+			public bool CanExecute(object parameter)
+			{
+				return true;
+			}
+
+			// TODO: What is this meant to be used for?
+			public event EventHandler CanExecuteChanged;
+
+			public void Execute(object parameter)
+			{
+				if (parameter is string direction)
+				{
+					if (direction == "Desc")
+						Svm.SortIntegers(false);
+					else if (direction == "Asc")
+						Svm.SortIntegers(true);
+				}
+			}
+			public SortIntCommand(Sorting_VM svm)
+			{
+				Svm = svm;
+			}
+		}
 		#endregion
 
 		#region INotifyPropertyChanged
