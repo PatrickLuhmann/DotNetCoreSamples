@@ -16,6 +16,9 @@ namespace WpfSamples.List_Sorting.ViewModel
 
 		public ObservableCollection<int> Integers { get; set; }
 
+		private bool IntegersAscActive = false;
+		private bool IntegersDescActive = false;
+
 		public Sorting_VM()
 		{
 			Salutation = "Welcome to the list sorting sample!";
@@ -48,7 +51,13 @@ namespace WpfSamples.List_Sorting.ViewModel
 		public void SortIntegersAscending()
 		{
 			ListCollectionView lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(Integers);
-			lcv.CustomSort = new SortIntegersAscending();
+			if (!IntegersAscActive)
+				lcv.CustomSort = new SortIntegersAscending();
+			else
+				lcv.CustomSort = null;
+
+			IntegersAscActive = !IntegersAscActive;
+			IntegersDescActive = false;
 		}
 
 		public ICommand SortIntegersDescendingCmd { get { return new SortIntDescCommand(); } }
@@ -71,7 +80,13 @@ namespace WpfSamples.List_Sorting.ViewModel
 		public void SortIntegersDescending()
 		{
 			ListCollectionView lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(Integers);
-			lcv.CustomSort = new SortIntegersDescending();
+			if (!IntegersDescActive)
+				lcv.CustomSort = new SortIntegersDescending();
+			else
+				lcv.CustomSort = null;
+
+			IntegersDescActive = !IntegersDescActive;
+			IntegersAscActive = false;
 		}
 		#endregion
 
