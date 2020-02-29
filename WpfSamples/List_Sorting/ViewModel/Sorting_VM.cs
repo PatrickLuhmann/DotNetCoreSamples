@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Input;
+using WpfSamples.List_Sorting.Model;
 
 namespace WpfSamples.List_Sorting.ViewModel
 {
@@ -15,6 +16,8 @@ namespace WpfSamples.List_Sorting.ViewModel
 		public string Salutation { get; set; }
 
 		public ObservableCollection<int> Integers { get; set; }
+
+		public ObservableCollection<LedgerItem> LedgerItems { get; set; }
 
 		private bool IntegersAscActive = false;
 		private bool IntegersDescActive = false;
@@ -28,6 +31,19 @@ namespace WpfSamples.List_Sorting.ViewModel
 			Integers = new ObservableCollection<int>();
 			for (int i = 0; i < 100; i++)
 				Integers.Add(rng.Next(0, 101));
+
+			LedgerItems = new ObservableCollection<LedgerItem>();
+			for (int i = 0; i < 100; i++)
+			{
+				LedgerItems.Add(new LedgerItem
+				{
+					Id = i,
+					Name = Guid.NewGuid().ToString(),
+					Date = DateTime.Now - TimeSpan.FromDays(rng.Next(0, 1000)),
+					Value = rng.Next(1, 10000) * (decimal)rng.NextDouble(),
+					Quantity = rng.Next(1, 100),
+				});
+			}
 		}
 
 		private void SortIntegers(bool asc)

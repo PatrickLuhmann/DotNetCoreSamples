@@ -12,8 +12,9 @@
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -22,7 +23,21 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="{Binding Salutation}"/>
         <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Integers}"/>
-        <ListView Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Integers}"/>
+        <DataGrid Grid.Row="1" Grid.Column="1" ItemsSource="{Binding LedgerItems}">
+        </DataGrid>
+        <ListView Grid.Row="1" Grid.Column="2" ItemsSource="{Binding LedgerItems}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="5" Text="{Binding Id}"/>
+                        <TextBlock Margin="5" Text="{Binding Name}"/>
+                        <TextBlock Margin="5" Text="{Binding Date}"/>
+                        <TextBlock Margin="5" Text="{Binding Value}"/>
+                        <TextBlock Margin="5" Text="{Binding Quantity}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Button Margin="5" Command="{Binding SortIntegersCmd}" CommandParameter="Asc">Sort Asc</Button>
             <Button Margin="5" Command="{Binding SortIntegersCmd}" CommandParameter="Desc">Sort Desc</Button>
