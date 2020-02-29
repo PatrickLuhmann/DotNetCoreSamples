@@ -24,10 +24,8 @@
         <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Integers}"/>
         <ListView Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Integers}"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Margin="5" Command="{Binding SortIntegersAscendingCmd}" CommandParameter="{Binding}">Sort Asc</Button>
-            <Button Margin="5" Command="{Binding SortIntegersDescendingCmd}" CommandParameter="{Binding}">Sort Desc</Button>
-            <Button Margin="5" Command="{Binding PocSortIntegersCmd}" CommandParameter="Asc">Upping</Button>
-            <Button Margin="5" Command="{Binding PocSortIntegersCmd}" CommandParameter="Desc">Downing</Button>
+            <Button Margin="5" Command="{Binding SortIntegersCmd}" CommandParameter="Asc">Sort Asc</Button>
+            <Button Margin="5" Command="{Binding SortIntegersCmd}" CommandParameter="Desc">Sort Desc</Button>
         </StackPanel>
     </Grid>
 </Window>

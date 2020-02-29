@@ -57,43 +57,7 @@ namespace WpfSamples.List_Sorting.ViewModel
 		}
 
 		#region Commands
-		public ICommand SortIntegersAscendingCmd { get { return new SortIntAscCommand(); } }
-		private class SortIntAscCommand : ICommand
-		{
-			public bool CanExecute(object parameter)
-			{
-				return true;
-			}
-
-			// TODO: What is this meant to be used for?
-			public event EventHandler CanExecuteChanged;
-
-			public void Execute(object parameter)
-			{
-				if (parameter is Sorting_VM svm)
-					svm.SortIntegers(true);
-			}
-		}
-
-		public ICommand SortIntegersDescendingCmd { get { return new SortIntDescCommand(); } }
-		private class SortIntDescCommand : ICommand
-		{
-			public bool CanExecute(object parameter)
-			{
-				return true;
-			}
-
-			// TODO: What is this meant to be used for?
-			public event EventHandler CanExecuteChanged;
-
-			public void Execute(object parameter)
-			{
-				if (parameter is Sorting_VM svm)
-					svm.SortIntegers(false);
-			}
-		}
-
-		public ICommand PocSortIntegersCmd { get { return new SortIntCommand(this); } }
+		public ICommand SortIntegersCmd { get { return new SortIntCommand(this); } }
 		private class SortIntCommand : ICommand
 		{
 			private readonly Sorting_VM Svm = null;
