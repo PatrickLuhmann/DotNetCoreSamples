@@ -13,8 +13,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -23,7 +23,8 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="{Binding Salutation}"/>
         <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Integers}"/>
-        <DataGrid Grid.Row="1" Grid.Column="1" ItemsSource="{Binding LedgerItems}">
+        <DataGrid Grid.Row="1" Grid.Column="1" ItemsSource="{Binding LedgerItems}"
+                  CanUserSortColumns="False">
         </DataGrid>
         <ListView Grid.Row="1" Grid.Column="2" ItemsSource="{Binding LedgerItems}">
             <ListView.ItemTemplate>
@@ -41,6 +42,13 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Button Margin="5" Command="{Binding SortIntegersCmd}" CommandParameter="Asc">Sort Asc</Button>
             <Button Margin="5" Command="{Binding SortIntegersCmd}" CommandParameter="Desc">Sort Desc</Button>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <Button Margin="5" Command="{Binding SortLedgerCmd}" CommandParameter="Id">Sort Id</Button>
+            <Button Margin="5" Command="{Binding SortLedgerCmd}" CommandParameter="Name">Sort Name</Button>
+            <Button Margin="5" Command="{Binding SortLedgerCmd}" CommandParameter="Date">Sort Date</Button>
+            <Button Margin="5" Command="{Binding SortLedgerCmd}" CommandParameter="Value">Sort Value</Button>
+            <Button Margin="5" Command="{Binding SortLedgerCmd}" CommandParameter="Quantity">Sort Qty</Button>
         </StackPanel>
     </Grid>
 </Window>

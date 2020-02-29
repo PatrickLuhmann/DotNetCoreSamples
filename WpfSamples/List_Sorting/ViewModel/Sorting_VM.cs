@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Data;
@@ -21,6 +22,8 @@ namespace WpfSamples.List_Sorting.ViewModel
 
 		private bool IntegersAscActive = false;
 		private bool IntegersDescActive = false;
+
+		private Dictionary<string, int> LedgerSortState;
 
 		public Sorting_VM()
 		{
@@ -44,6 +47,14 @@ namespace WpfSamples.List_Sorting.ViewModel
 					Quantity = rng.Next(1, 100),
 				});
 			}
+
+			LedgerSortState = new Dictionary<string, int>();
+			LedgerSortState.Add("Id", 0);
+			LedgerSortState.Add("Name", 0);
+			LedgerSortState.Add("Date", 0);
+			LedgerSortState.Add("Value", 0);
+			LedgerSortState.Add("Quantity", 0);
+			SortLedger("Id");
 		}
 
 		private void SortIntegers(bool asc)
@@ -72,6 +83,36 @@ namespace WpfSamples.List_Sorting.ViewModel
 			}
 		}
 
+		private void SortLedger(string field)
+		{
+			ListCollectionView lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(LedgerItems);
+
+			if (LedgerSortState[field] == 0)
+			{
+				// Not currently being sorted by this field, so sort
+				// it ASC and mark the others as being not sorted currently.
+				foreach (var entry in LedgerSortState.Keys.OfType<object>().ToArray())
+					LedgerSortState[(string)entry] = 0;
+				LedgerSortState[field] = 1;
+				lcv.CustomSort = new LedgerSorter(field, true);
+			}
+			else if (LedgerSortState[field] == 1)
+			{
+				// Currently being sorted ASC by this field, so sort it DESC.
+				LedgerSortState[field] = -1;
+				lcv.CustomSort = new LedgerSorter(field, false);
+			}
+			else if (LedgerSortState[field] == -1)
+			{
+				// Currently being sorted DESC by this field, so
+				// remove sorting altogether.
+				LedgerSortState[field] = 0;
+				lcv.CustomSort = null;
+			}
+			else
+				throw new ArgumentException("The value for this key is invalid.");
+		}
+
 		#region Commands
 		public ICommand SortIntegersCmd { get { return new SortIntCommand(this); } }
 		private class SortIntCommand : ICommand
@@ -96,6 +137,31 @@ namespace WpfSamples.List_Sorting.ViewModel
 				}
 			}
 			public SortIntCommand(Sorting_VM svm)
+			{
+				Svm = svm;
+			}
+		}
+
+		public ICommand SortLedgerCmd { get { return new SortLedgerCommand(this); } }
+		private class SortLedgerCommand : ICommand
+		{
+			private readonly Sorting_VM Svm = null;
+			public bool CanExecute(object parameter)
+			{
+				return true;
+			}
+
+			// TODO: What is this meant to be used for?
+			public event EventHandler CanExecuteChanged;
+
+			public void Execute(object parameter)
+			{
+				if (parameter is string field)
+				{
+					Svm.SortLedger(field);
+				}
+			}
+			public SortLedgerCommand(Sorting_VM svm)
 			{
 				Svm = svm;
 			}
