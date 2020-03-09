@@ -1,0 +1,3 @@
+﻿This is the salutation file for the Main window.
+The contents of this file should be of general interest to the user.
+The file ends with this period.
