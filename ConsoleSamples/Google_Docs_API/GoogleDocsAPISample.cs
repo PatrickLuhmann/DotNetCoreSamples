@@ -45,9 +45,6 @@ namespace ConsoleSamples.Google_Docs_API
 			using (var stream = new MemoryStream(Properties.Resources.credentials))
 			{
 				Console.WriteLine($"I created a memory stream based on the contents of the resource file: {Resources.credentials.ToString()}.");
-//			}
-//			using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
-//			{
 				string credPath = "docs-token.json";
 
 				credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
@@ -145,6 +142,7 @@ namespace ConsoleSamples.Google_Docs_API
 			});
 
 			// Define request parameters.
+			// This is a public spreadsheet created for this sample.
 			String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
 			String range = "Class Data!A2:E";
 			SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -190,6 +188,55 @@ namespace ConsoleSamples.Google_Docs_API
 				Console.WriteLine("No data found.");
 			}
 			Console.Read();
+
+			// Get Dividend information from an analysis spreadsheet.
+			Console.Write("Enter the ID of an anlysis spreadsheet: ");
+			string input = Console.ReadLine();
+			// Do some parsing here if necessary, since it is far easier to copy-paste the whole URL.
+
+			spreadsheetId = input;
+			range = "Financial Data!A:M";
+			request = service.Spreadsheets.Values.Get(spreadsheetId, range);
+			response = request.Execute();
+			values = response.Values;
+			if (values != null && values.Count > 1)
+			{
+				Console.WriteLine("Here are the headers I found:");
+				int colNum = 0;
+				int divColNum = -1;
+				foreach (var cell in values[1])
+				{
+					// Print the header names.
+					Console.WriteLine($"{cell}");
+
+					if ((string)cell == "Dividend Amount")
+						divColNum = colNum;
+					colNum++;
+				}
+				if (divColNum != -1)
+				{
+					for (int idx = 2; idx < values.Count; idx++)
+					{
+						string str = (string)values[idx][divColNum];
+						decimal dividend;
+						if (Decimal.TryParse(str,
+							System.Globalization.NumberStyles.AllowCurrencySymbol | System.Globalization.NumberStyles.Number,
+							null, out dividend))
+						{
+							Console.WriteLine($"[{idx}] Divided: {dividend}");
+						}
+					}
+				}
+				else
+				{
+					Console.WriteLine("The Dividend Amount column was not found.");
+				}
+			}
+			else
+			{
+				Console.WriteLine("No data found.");
+			}
+
 		}
 	}
 }
