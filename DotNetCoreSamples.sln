@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSamples", "WpfSamples\WpfSamples.csproj", "{280C6723-5C50-4C54-98E6-293C9FDFC913}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfSamples", "WpfSamples\WpfSamples.csproj", "{280C6723-5C50-4C54-98E6-293C9FDFC913}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSamples", "ConsoleSamples\ConsoleSamples.csproj", "{6875EA0B-B0AE-4BD0-BD67-0384EF85D879}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{280C6723-5C50-4C54-98E6-293C9FDFC913}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{280C6723-5C50-4C54-98E6-293C9FDFC913}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{280C6723-5C50-4C54-98E6-293C9FDFC913}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6875EA0B-B0AE-4BD0-BD67-0384EF85D879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6875EA0B-B0AE-4BD0-BD67-0384EF85D879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6875EA0B-B0AE-4BD0-BD67-0384EF85D879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6875EA0B-B0AE-4BD0-BD67-0384EF85D879}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
