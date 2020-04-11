@@ -13,7 +13,7 @@ using ConsoleSamples.Properties;
 
 namespace ConsoleSamples.Google_Docs_API
 {
-	public class GoogleDocsAPISample
+	public class GoogleDocsAPISample : IConsoleSample
 	{
 		public void Run()
 		{
