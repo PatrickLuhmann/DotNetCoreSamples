@@ -13,5 +13,7 @@ namespace EFSamples.StudentModel
 		public StudentAddress Address { get; set; }
 		public StudentAddressFKAnnotation AnnotationAddress { get; set; }
 		public StudentAddressUseFluent FluentAddress { get; set; }
+		public int GradeId { get; set; }
+		public Grade Grade { get; set; }
 	}
 }

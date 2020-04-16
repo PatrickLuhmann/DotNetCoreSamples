@@ -11,6 +11,7 @@ namespace EFSamples.StudentModel
 		public DbSet<StudentAddress> StudentAddresses { get; set; }
 		public DbSet<StudentAddressFKAnnotation> StudentAddressFKAnnotations { get; set; }
 		public DbSet<StudentAddressUseFluent> StudentAddressUseFluents { get; set; }
+		public DbSet<Grade> Grades { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

@@ -25,11 +25,22 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			Console.WriteLine($"Number of records in the StudentAddresses table: {Context.StudentAddresses.Count()}.");
 			Console.WriteLine($"Number of records in the StudentAddressFKAnnotations table: {Context.StudentAddressFKAnnotations.Count()}.");
 			Console.WriteLine($"Number of records in the StudentAddressUseFluents table: {Context.StudentAddressUseFluents.Count()}.");
+			Console.WriteLine($"Number of records in the Grades table: {Context.Grades.ToList().Count}.");
+
+			List<Grade> theGrades = Context.Grades.ToList();
+			Console.WriteLine($"Here are the existing grades");
+			Console.WriteLine($"============================");
+			foreach(Grade grade in theGrades)
+			{
+				Console.WriteLine($"[{grade.Id:D3}]  {grade.Name} - {grade.Section}");
+			}
 
 			// Create a Student.
 			Student s1 = new Student()
 			{
 				StudentName = "John",
+				// Specify Grade in the Student.
+				Grade = theGrades[0],
 			};
 			Context.Students.Add(s1);
 			numChanged = Context.SaveChanges();
@@ -40,6 +51,8 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			{
 				StudentName = "Neil",
 			};
+			// Specify Grade by adding Student to Grade's collection.
+			theGrades[0].Students.Add(s2);
 
 			// Create a StudentAddress.
 			StudentAddress add2 = new StudentAddress()
@@ -58,6 +71,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			Student s3 = new Student()
 			{
 				StudentName = "Geddy",
+				Grade = theGrades[0],
 			};
 			Context.Students.Add(s3);
 			// NOTE: We do not have to save here. We can wait until we
@@ -88,6 +102,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			Student s4 = new Student()
 			{
 				StudentName = "Alex",
+				Grade = theGrades[0],
 			};
 			Context.Students.Add(s4);
 			// NOTE: We do not have to save here. We can wait until we
@@ -174,6 +189,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			Console.WriteLine($"Number of records in the StudentAddresses table: {Context.StudentAddresses.Count()}.");
 			Console.WriteLine($"Number of records in the StudentAddressFKAnnotations table: {Context.StudentAddressFKAnnotations.Count()}.");
 			Console.WriteLine($"Number of records in the StudentAddressUseFluents table: {Context.StudentAddressUseFluents.Count()}.");
+			Console.WriteLine($"Number of records in the Grades table: {Context.Grades.ToList().Count}.");
 
 			List<Student> students = Context.Students
 				.Include(s => s.Address)
@@ -183,6 +199,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			foreach (Student s in students)
 			{
 				Console.WriteLine($"[{s.Id:D3}] Name: {s.StudentName}");
+				Console.WriteLine($"Grade: {s.Grade.Name} - {s.Grade.Section}");
 				if (s.Address == null)
 					Console.WriteLine("  No conventional address on file.");
 				else
