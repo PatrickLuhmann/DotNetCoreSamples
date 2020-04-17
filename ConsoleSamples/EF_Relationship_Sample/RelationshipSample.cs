@@ -74,10 +74,6 @@ namespace ConsoleSamples.EF_Relationship_Sample
 				Grade = theGrades[0],
 			};
 			Context.Students.Add(s3);
-			// NOTE: We do not have to save here. We can wait until we
-			// attach the address. For the sake of efficient, don't do it.
-			//numChanged = Context.SaveChanges();
-			//Console.WriteLine($"Number of records changed: {numChanged}.");
 
 			// Create a StudentAddressFKAnnotation.
 			StudentAddressFKAnnotation add3 = new StudentAddressFKAnnotation()
@@ -87,14 +83,17 @@ namespace ConsoleSamples.EF_Relationship_Sample
 				State = "China",
 				Country = "Cygnus X-1",
 				ZipCode = 226868,
-				// Just setting Student here is not enough, so don't bother.
-				// It will be set automatically when added correctly.
-				//Student = s3,
+				// Specify the Student that "owns" this address.
+				Student = s3,
 			};
-			// NOTE: By setting the reference in the principal entity, the
-			// properties in the dependent entity will automatically be
-			// set to the proper values.
-			s3.AnnotationAddress = add3;
+			// Tell the Context about this new address. We need to do this because
+			// the Context has no other way of knowing about this object (which
+			// is different from the previous example, where the Context can see
+			// the new address via the new Student object it is INSERTing).
+			// Note that the statement:
+			//   Context.StudentAddressFKAnnotations.Add(add3);
+			// will do the same thing.
+			Context.Add<StudentAddressFKAnnotation>(add3);
 			numChanged = Context.SaveChanges();
 			Console.WriteLine($"Number of records changed: {numChanged}.");
 
@@ -104,11 +103,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 				StudentName = "Alex",
 				Grade = theGrades[0],
 			};
-			Context.Students.Add(s4);
-			// NOTE: We do not have to save here. We can wait until we
-			// attach the address. For the sake of efficient, don't do it.
-			//numChanged = Context.SaveChanges();
-			//Console.WriteLine($"Number of records changed: {numChanged}.");
+			Context.Add<Student>(s4);
 
 			// Create a StudentAddressFKAnnotation.
 			StudentAddressUseFluent add4 = new StudentAddressUseFluent()
@@ -208,7 +203,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 					Console.Write($"{s.Address.City}, ");
 					Console.Write($"{s.Address.State}, ");
 					Console.Write($"{s.Address.Country}, ");
-					Console.WriteLine($"{s.Address.ZipCode}");
+					Console.WriteLine($"{s.Address.ZipCode}  --  for Student {s.Address.StudentId}:{s.Address.Student.Id}");
 				}
 				if (s.AnnotationAddress == null)
 					Console.WriteLine("  No annotation address on file.");
@@ -218,7 +213,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 					Console.Write($"{s.AnnotationAddress.City}, ");
 					Console.Write($"{s.AnnotationAddress.State}, ");
 					Console.Write($"{s.AnnotationAddress.Country}, ");
-					Console.WriteLine($"{s.AnnotationAddress.ZipCode}");
+					Console.WriteLine($"{s.AnnotationAddress.ZipCode}  --  for Student {s.AnnotationAddress.Id}:{s.AnnotationAddress.Student.Id}");
 				}
 				if (s.FluentAddress == null)
 					Console.WriteLine("  No Fluent address on file.");
@@ -228,7 +223,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 					Console.Write($"{s.FluentAddress.City}, ");
 					Console.Write($"{s.FluentAddress.State}, ");
 					Console.Write($"{s.FluentAddress.Country}, ");
-					Console.WriteLine($"{s.FluentAddress.ZipCode}");
+					Console.WriteLine($"{s.FluentAddress.ZipCode}  --  for Student { s.FluentAddress.StudentForeignKey}:{ s.FluentAddress.Student.Id}");
 				}
 			}
 
