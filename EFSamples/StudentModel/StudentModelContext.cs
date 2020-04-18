@@ -27,6 +27,14 @@ namespace EFSamples.StudentModel
 				.HasOne(s => s.FluentAddress)
 				.WithOne(fa => fa.Student)
 				.HasForeignKey<StudentAddressUseFluent>(fa => fa.StudentForeignKey);
+
+			// Define the owned type in the Address entities.
+			modelBuilder.Entity<StudentAddress>()
+				.OwnsOne(sa => sa.HomeAddress);
+			modelBuilder.Entity<StudentAddressFKAnnotation>()
+				.OwnsOne(sa => sa.HomeAddress);
+			modelBuilder.Entity<StudentAddressUseFluent>()
+				.OwnsOne(sa => sa.HomeAddress);
 		}
 	}
 }

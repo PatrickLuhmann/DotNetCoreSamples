@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200412003637_Mig-StudentAddress2.cs" />
     <Compile Remove="Migrations\20200412003637_Mig-StudentAddress2.Designer.cs" />
+    <Compile Remove="Migrations\20200418170617_Mig-Owned-Type-Address.cs" />
+    <Compile Remove="Migrations\20200418170617_Mig-Owned-Type-Address.Designer.cs" />
+    <Compile Remove="Migrations\20200418170756_Mig-Owned-Type-Address.cs" />
+    <Compile Remove="Migrations\20200418170756_Mig-Owned-Type-Address.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
