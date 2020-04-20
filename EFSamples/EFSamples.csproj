@@ -11,6 +11,26 @@
     <Compile Remove="Migrations\20200418170617_Mig-Owned-Type-Address.Designer.cs" />
     <Compile Remove="Migrations\20200418170756_Mig-Owned-Type-Address.cs" />
     <Compile Remove="Migrations\20200418170756_Mig-Owned-Type-Address.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200420172525_Mig-Account.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200420172525_Mig-Account.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200420183626_Mig-Transaction-TPH.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200420183626_Mig-Transaction-TPH.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200422161311_Mig-Activities-And-Lots.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200422161311_Mig-Activities-And-Lots.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200422171140_Mig-Security.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200422171140_Mig-Security.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200422172751_Mig-Finance1.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200422172751_Mig-Finance1.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200423184129_Mig-Fix-Id-Type.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200423184129_Mig-Fix-Id-Type.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200423184854_Mig-Finance2.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200423184854_Mig-Finance2.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200424162409_Mig-Finance-4.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200424162409_Mig-Finance-4.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200424170032_Mig-Finance.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200424170032_Mig-Finance.Designer.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200527154842_Mig-Add-CashDividends.cs" />
+    <Compile Remove="Migrations\FinanceModel\20200527154842_Mig-Add-CashDividends.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +43,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.3" />
   </ItemGroup>
 
 </Project>
