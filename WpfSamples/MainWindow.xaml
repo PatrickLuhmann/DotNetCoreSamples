@@ -15,6 +15,7 @@
             <TextBlock Text="{Binding Salutation}"/>
             <Button Margin="5" Click="Behavior_Button_Click">Attached Behaviors (Including Dialog Boxes)</Button>
             <Button Margin="5" Click="List_Sorting_Button_Click">List Sorting</Button>
+            <Button Margin="5" Click="Trigger_Button_Click">Trigger And Style Sample</Button>
         </StackPanel>
     </Grid>
 </Window>
