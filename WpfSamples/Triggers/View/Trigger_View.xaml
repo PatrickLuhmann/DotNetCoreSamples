@@ -12,6 +12,16 @@
     </Window.DataContext>
     <Window.Resources>
         <!-- Specify the x:Key in StaticResource in Style property. -->
+        <Style x:Key="VisibleForB" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item B">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Specify the x:Key in StaticResource in Style property. -->
         <Style x:Key="PinkBackground" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Template">
@@ -216,17 +226,7 @@
             <TextBlock>Line A3</TextBlock>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Vertical">
-            <StackPanel.Style>
-                <Style TargetType="{x:Type StackPanel}">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item B">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
+        <StackPanel Style="{StaticResource VisibleForB}" Grid.Row="2" Orientation="Vertical">
             <TextBlock>Line B1</TextBlock>
             <TextBlock>Line B2</TextBlock>
             <TextBlock>Line B3</TextBlock>
