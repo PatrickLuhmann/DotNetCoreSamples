@@ -11,6 +11,9 @@ namespace ConsoleSamples.Finance_Sample
 	class FinanceSample : IConsoleSample
 	{
 		public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(b => { b.AddConsole(); });
+		private string DbFilename = "finance_sample.db";
+		private FinanceLogic FinLogic;
+
 		public void Run()
 		{
 			Console.WriteLine("Welcome to the Finance Sample.");
@@ -18,6 +21,9 @@ namespace ConsoleSamples.Finance_Sample
 
 			// Create a logger for EFCore to use.
 			//FinanceModelContext.Logger = MyLoggerFactory;
+
+			// Create the FinanceLogic object.
+			FinLogic = new FinanceLogic(DbFilename);
 
 			// Update the database, if necessary.
 			using (var context = new FinanceModelContext())
@@ -118,7 +124,7 @@ namespace ConsoleSamples.Finance_Sample
 		{
 			Console.WriteLine("Here are all of the accounts in the database:");
 			int numAccts = -1;
-			List<Account> accts = FinanceLogic.GetAllAccounts();
+			List<Account> accts = FinLogic.GetAllAccounts();
 			foreach (Account acct in accts)
 			{
 				Console.WriteLine($"[{acct.Id:D4}] {acct.Name} - {acct.Institution} : "
@@ -202,7 +208,7 @@ namespace ConsoleSamples.Finance_Sample
 				return;
 
 			Account acct;
-			acct = FinanceLogic.GetAccount(id);
+			acct = FinLogic.GetAccount(id);
 			if (acct == null)
 			{
 				Console.WriteLine($"ERROR: Account ID {id} not found.");
@@ -611,7 +617,7 @@ namespace ConsoleSamples.Finance_Sample
 			sec.CashDividends.Add(cashDividend);
 
 			// Find the accounts with a position in this security on the day before the ex-dividend date.
-			List<Account> accts = FinanceLogic.GetAllAccounts();
+			List<Account> accts = FinLogic.GetAllAccounts();
 			foreach (Account acct in accts)
 			{
 				Console.WriteLine($"[{acct.Id:D4}] {acct.Name} - {acct.Institution} : "

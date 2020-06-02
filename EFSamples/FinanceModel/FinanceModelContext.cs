@@ -8,7 +8,7 @@ namespace EFSamples.FinanceModel
 {
 	public class FinanceModelContext : DbContext
 	{
-		public string DbConnectionString = @"DataSource=finance_sample.db";
+		public string DbConnectionString;
 		public static ILoggerFactory Logger = null;
 
 		#region Tables
@@ -43,11 +43,11 @@ namespace EFSamples.FinanceModel
 		{
 		}
 
-		public FinanceModelContext(string dbConnect)
+		public FinanceModelContext(string filename)
 		{
-			DbConnectionString = dbConnect;
+			DbConnectionString = "DataSource=" + filename;
 		}
 
-		public FinanceModelContext() { }
+		public FinanceModelContext() : this("finance_sample.db") { }
 	}
 }

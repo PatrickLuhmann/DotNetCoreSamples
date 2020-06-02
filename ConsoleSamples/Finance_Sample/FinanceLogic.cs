@@ -9,9 +9,11 @@ namespace ConsoleSamples.Finance_Sample
 {
 	public class FinanceLogic
 	{
-		static public Account GetAccount(Int64 id)
+		private readonly string DbFilename;
+
+		public Account GetAccount(Int64 id)
 		{
-			using (var context = new FinanceModelContext())
+			using (var context = new FinanceModelContext(DbFilename))
 			{
 				Account acct = context.Accounts
 					.Where(a => a.Id == id)
@@ -47,10 +49,10 @@ namespace ConsoleSamples.Finance_Sample
 			}
 		}
 
-		static public List<Account> GetAllAccounts(bool openOnly = false)
+		public List<Account> GetAllAccounts(bool openOnly = false)
 		{
 			List<Account> accounts;
-			using (var context = new FinanceModelContext())
+			using (var context = new FinanceModelContext(DbFilename))
 			{
 				if (openOnly)
 					accounts = context.Accounts.Where(a => a.Closed == false).ToList();
@@ -61,6 +63,11 @@ namespace ConsoleSamples.Finance_Sample
 					accounts[i] = GetAccount(accounts[i].Id);
 			}
 			return accounts;
+		}
+
+		public FinanceLogic(string filename)
+		{
+			DbFilename = filename;
 		}
 	}
 }
