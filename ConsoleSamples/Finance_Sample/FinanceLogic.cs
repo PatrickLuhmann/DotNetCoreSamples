@@ -13,13 +13,21 @@ namespace ConsoleSamples.Finance_Sample
 		{
 			using (var context = new FinanceModelContext())
 			{
-				Account acct = context.Accounts.Find(id);
+				Account acct = context.Accounts
+					.Where(a => a.Id == id)
+					.Include(a => a.Events)
+						.ThenInclude(ev => ev.Dividend)
+						// TODO: Do we get the Security here?
+						// If so, do we also get its Prices and QuarterlyReports?
+						// Where does it end? If we are getting everything then
+						// why not just load the entire database into memory at the beginning?
+					.Single();
 				if (acct == null)
 					return null;
 
-				// Fetch the Account's collections from the database.
-				context.Entry(acct).Collection(a => a.Events).Load();
-				// We need to manually walk the dependency graph.
+				// We need to manually walk the Activities dependency graph
+				// because they are composed of subclasses, which cannot be
+				// fetched with a single .Include statement.
 				foreach (Event ev in acct.Events)
 				{
 					context.Entry(ev).Collection(e => e.Activities).Load();

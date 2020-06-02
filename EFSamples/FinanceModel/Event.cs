@@ -54,6 +54,8 @@ namespace EFSamples.FinanceModel
 				if (Id != theObj.Id ||
 					// Check only ID of principal entity to avoid recursion.
 					AccountId != theObj.AccountId ||
+					// Check only ID of principal entity to avoid recursion.
+					DividendId != theObj.DividendId ||
 					// Check Count here; whole list will be checked later.
 					Activities.Count != theObj.Activities.Count ||
 					Type != theObj.Type ||

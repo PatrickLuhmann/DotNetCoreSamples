@@ -337,10 +337,8 @@ namespace ConsoleSamples.Finance_Sample
 						// But some Events interact with other Events, which means that simply
 						// removing the target Event will leave the database in an inconsistent
 						// state.
-						// At the moment there is no "Type" field in Event. I have been using
-						// Note for this purpose, but this should really be reserved for the user.
 
-						// For now, only allow the deletion of an Event if it has only one
+						// TODO: For now, only allow the deletion of an Event if it has only one
 						// Activity, and it is of type CashActivity.
 						if (ev.Activities.Count != 1 ||
 							!(ev.Activities[0] is CashActivity))
@@ -504,7 +502,10 @@ namespace ConsoleSamples.Finance_Sample
 				}
 
 				// Fetch the Security's collections from the database.
+
+				// Don't fetch the Events yet.
 				context.Entry(sec).Collection(s => s.CashDividends).Load();
+
 				// TODO: Add Prices here, when implemented.
 				// TODO: Add QuarterlyReports here, when implemented.
 			}
@@ -531,7 +532,8 @@ namespace ConsoleSamples.Finance_Sample
 				Console.WriteLine();
 				Console.Write("> ");
 				userInput = Console.ReadLine();
-				switch (userInput.ToUpper())
+				string[] tokens = userInput.Split();
+				switch (tokens[0].ToUpper())
 				{
 					case "LCD":
 						ListDividends(sec);
@@ -543,7 +545,18 @@ namespace ConsoleSamples.Finance_Sample
 						EditCashDividend(sec);
 						break;
 					case "DCD":
-						DeleteCashDividend(sec);
+						if (tokens.Length != 2)
+						{
+							Console.WriteLine("ERROR: Inccorect number of parameters! This command takes one parameter.");
+							break;
+						}
+						Int64 divId = Convert.ToInt64(tokens[1]);
+						if (divId == 0)
+						{
+							Console.WriteLine("ERROR: The parameter must be an integer!");
+							break;
+						}
+						DeleteCashDividend(sec, divId);
 						break;
 					case "E":
 						EditSecurity(sec);
@@ -672,10 +685,51 @@ namespace ConsoleSamples.Finance_Sample
 			return numChanges;
 		}
 
-		private int DeleteCashDividend(Security sec)
+		private int DeleteCashDividend(Security sec, Int64 divId)
 		{
 			int numChanges = 0;
 
+			// Find the CashDividend in the Security, if it exists.
+			CashDividend div = sec.CashDividends.Find(cd => cd.Id == divId);
+			if (div == null)
+			{
+				Console.WriteLine($"ERROR: CashDividend [{divId}] is not associated with this security!");
+				return numChanges;
+			}
+
+			using (var context = new FinanceModelContext())
+			{
+				context.Attach(div);
+
+				// Make sure we have the entire Dividend.
+				// We already have Security.
+				// Fetch Events.
+				context.Entry(div).Collection(d => d.Events).Load();
+				foreach (Event ev in div.Events)
+				{
+					// Fetch Account.
+					context.Entry(ev).Reference(e => e.Account).Load();
+					// We already have Dividend.
+					// Fetch Activities. There should only be a single CashActivity,
+					// which does not have any dependent entities to load.
+					context.Entry(ev).Collection(e => e.Activities).Load();
+				}
+
+
+				// Remove the CashDividend from the Security.
+				context.Attach(sec);
+				sec.CashDividends.Remove(div);
+
+				// Delete the Events associated with this CashDividend,
+				// as well as from the Accounts that they are in.
+				foreach (Event ev in div.Events)
+				{
+					ev.Account.Events.Remove(ev);
+				}
+				div.Events.Clear();
+
+				numChanges = context.SaveChanges();
+			}
 			return numChanges;
 		}
 

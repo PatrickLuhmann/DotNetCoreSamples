@@ -226,7 +226,7 @@ namespace EFSamples.FinanceModel
 	{
 		#region Schema
 		public decimal Proceeds { get; set; }
-		// A SharesOutActivity creates a collection of LotAssignments.
+		// Dependent entities (1:N)
 		public List<LotAssignment> LotAssignments { get; set; }
 		#endregion
 
