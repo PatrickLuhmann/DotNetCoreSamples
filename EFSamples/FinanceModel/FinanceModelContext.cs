@@ -8,7 +8,10 @@ namespace EFSamples.FinanceModel
 {
 	public class FinanceModelContext : DbContext
 	{
+		public string DbConnectionString = @"DataSource=finance_sample.db";
 		public static ILoggerFactory Logger = null;
+
+		#region Tables
 		public DbSet<Account> Accounts { get; set; }
 		public DbSet<Event> Events { get; set; }
 		public DbSet<Activity> Activities { get; set; }
@@ -23,12 +26,12 @@ namespace EFSamples.FinanceModel
 		public DbSet<CashDividend> Dividends { get; set; }
 		public DbSet<QuarterlyReport> QuarterlyReports { get; set; }
 		public DbSet<FinancialResult> FinancialResults { get; set; }
-
+		#endregion
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			// The path is relative to the main assembly (.exe).
-			optionsBuilder.UseSqlite(@"DataSource=finance_sample.db")
+			optionsBuilder.UseSqlite(DbConnectionString)
 				.EnableSensitiveDataLogging();
 
 			// Register our console logger.
@@ -39,5 +42,12 @@ namespace EFSamples.FinanceModel
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 		}
+
+		public FinanceModelContext(string dbConnect)
+		{
+			DbConnectionString = dbConnect;
+		}
+
+		public FinanceModelContext() { }
 	}
 }
