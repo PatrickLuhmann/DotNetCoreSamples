@@ -26,14 +26,6 @@ namespace EFSamples.FinanceModel
 		public string Note { get; set; }
 		#endregion
 
-		public DateTime GetDate()
-		{
-			if (Activities[0] == null)
-				return new DateTime().Date;
-			else
-				return Activities[0].Date;
-		}
-
 		public Event()
 		{
 			Activities = new List<Activity>();
