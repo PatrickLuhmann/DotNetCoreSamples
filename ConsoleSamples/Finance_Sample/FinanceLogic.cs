@@ -49,6 +49,12 @@ namespace ConsoleSamples.Finance_Sample
 			}
 		}
 
+		/// <summary>
+		/// Gets the Account objects from the database.
+		/// This is a "shallow" fetch, in that the dependent entites are not retrieved.
+		/// </summary>
+		/// <param name="openOnly">Determines if closed accounts should be included.</param>
+		/// <returns></returns>
 		public List<Account> GetAllAccounts(bool openOnly = false)
 		{
 			List<Account> accounts;
@@ -58,9 +64,6 @@ namespace ConsoleSamples.Finance_Sample
 					accounts = context.Accounts.Where(a => a.Closed == false).ToList();
 				else
 					accounts = context.Accounts.ToList();
-
-				for (int i = 0; i < accounts.Count; i++)
-					accounts[i] = GetAccount(accounts[i].Id);
 			}
 			return accounts;
 		}
