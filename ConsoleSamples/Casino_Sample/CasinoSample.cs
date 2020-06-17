@@ -1,12 +1,54 @@
-﻿using System;
+﻿using Google.Apis.Docs.v1.Data;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleSamples.Casino_Sample
 {
 	public class CasinoSample : IConsoleSample
 	{
+		Dictionary<string, int> HandToIndex_7CardMash = new Dictionary<string, int>();
+		// Certain hands can have multiple possible interpretations.
+		// EX: Straight5 and Flush5.
+		// EX: Flush6 and Flush5Pair.
+		// EX: Straight5Pair, Straight6, Flush5.
+		int[] NumHandInterpretations = new int[3];
+		int[] HandRankCount;
+		int NumResults = 0;
+
+		public CasinoSample()
+		{
+			HandToIndex_7CardMash.TryAdd("StraightFlush7", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("StraightFlush6", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("StraightFlush5Pair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("StraightFlush5", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Flush7", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Flush6", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Flush5Pair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Flush5", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Straight7", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Straight6", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Straight5Pair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Straight5", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("QuadSet", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("QuadPair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Quad", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("SetSet", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("SetPairPair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("SetPair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Set", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("PairPairPair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("PairPair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("Pair", HandToIndex_7CardMash.Count);
+			HandToIndex_7CardMash.TryAdd("HighCard", HandToIndex_7CardMash.Count);
+
+			HandRankCount = new int[HandToIndex_7CardMash.Count];
+		}
+
 		public void Run()
 		{
 			Console.WriteLine("Welcome to the Casino Sample.");
@@ -37,6 +79,7 @@ namespace ConsoleSamples.Casino_Sample
 
 		public void PokerHandDistributions()
 		{
+			int numThreads = 4;
 			int numIterations = 100000;
 			bool printHands = false;
 			bool quit = false;
@@ -48,7 +91,8 @@ namespace ConsoleSamples.Casino_Sample
 				Console.WriteLine("1. Simple 5 random cards");
 				Console.WriteLine("2. Texas Hold 'em");
 				Console.WriteLine("3. 7-Card Mashup");
-				Console.WriteLine($"N. Set number of iterations [{numIterations} @ ~ {numIterations / 50000} secs]");
+				Console.WriteLine($"N. Set number of iterations per thread [{numIterations}]");
+				Console.WriteLine($"T. Set number of threads [{numThreads}");
 				Console.WriteLine($"P. Toggle print of each hand [{printHands}]");
 				Console.WriteLine("Q. Quit this menu");
 				string userInput = Console.ReadLine();
@@ -67,6 +111,13 @@ namespace ConsoleSamples.Casino_Sample
 						Console.WriteLine("Enter the number of iterations: ");
 						userInput = Console.ReadLine();
 						numIterations = Convert.ToInt32(userInput);
+						break;
+					case "T":
+						Console.WriteLine("Enter the number of threads to use: ");
+						userInput = Console.ReadLine();
+						numThreads = Convert.ToInt32(userInput);
+						if (numThreads < 1)
+							numThreads = 1;
 						break;
 					case "P":
 						printHands = !printHands;
@@ -262,98 +313,17 @@ namespace ConsoleSamples.Casino_Sample
 				if (simulation == "7 card mashup")
 				{
 					// All 7 cards are played simulation.
-					Deck deckOfCards = new Deck();
-					Dictionary<string, int> HandRanks = new Dictionary<string, int>();
-					HandRanks.Add("Flush7", 0);
-					HandRanks.Add("Flush6", 0);
-					HandRanks.Add("Flush5", 0);
-					HandRanks.Add("Straight7", 0);
-					HandRanks.Add("Straight6", 0);
-					HandRanks.Add("Straight5", 0);
 
-					// POC method; compare to existing method.
-					Dictionary<string, int> HandRanks2 = new Dictionary<string, int>();
-					HandRanks2.Add("StraightFlush7", 0);
-					HandRanks2.Add("StraightFlush6", 0);
-					HandRanks2.Add("StraightFlush5Pair", 0);
-					HandRanks2.Add("StraightFlush5", 0);
-					HandRanks2.Add("Flush7", 0);
-					HandRanks2.Add("Flush6", 0);
-					HandRanks2.Add("Flush5Pair", 0);
-					HandRanks2.Add("Flush5", 0);
-					HandRanks2.Add("Straight7", 0);
-					HandRanks2.Add("Straight6", 0);
-					HandRanks2.Add("Straight5Pair", 0);
-					HandRanks2.Add("Straight5", 0);
-					HandRanks2.Add("QuadSet", 0);
-					HandRanks2.Add("QuadPair", 0);
-					HandRanks2.Add("Quad", 0);
-					HandRanks2.Add("SetSet", 0);
-					HandRanks2.Add("SetPairPair", 0);
-					HandRanks2.Add("SetPair", 0);
-					HandRanks2.Add("Set", 0);
-					HandRanks2.Add("PairPairPair", 0);
-					HandRanks2.Add("PairPair", 0);
-					HandRanks2.Add("Pair", 0);
-					HandRanks2.Add("HighCard", 0);
+					Array.Clear(HandRankCount, 0, HandRankCount.Length);
+					Array.Clear(NumHandInterpretations, 0, NumHandInterpretations.Length);
+					NumResults = 0;
 
-					List<string> pocResults;
-					for (int iter = 0; iter < numIterations; iter++)
+					Parallel.For(0, numThreads
+						, iterator =>
 					{
-						// Create the hand.
-						deckOfCards.Shuffle();
-						List<Card> hand = new List<Card>();
-						hand.Add(deckOfCards.Deal());
-						hand.Add(deckOfCards.Deal());
-						hand.Add(deckOfCards.Deal());
-						hand.Add(deckOfCards.Deal());
-						hand.Add(deckOfCards.Deal());
-						hand.Add(deckOfCards.Deal());
-						hand.Add(deckOfCards.Deal());
-						hand.Sort();
-						hand.Reverse();
+						Simulate7CardMash(numIterations, printHands, iterator);
+					}); // end Parallel.For
 
-#if false
-						// not sure how to evaluate this yet, so start small.
-						int flushLen = PokerGame.LargestFlush(hand);
-						if (flushLen == 7)
-							HandRanks["Flush7"]++;
-						else if (flushLen == 6)
-							HandRanks["Flush6"]++;
-						else if (flushLen == 5)
-							HandRanks["Flush5"]++;
-
-						int straightLen = PokerGame.LargestStraight(hand);
-						if (straightLen == 7)
-							HandRanks["Straight7"]++;
-						else if (straightLen == 6)
-							HandRanks["Straight6"]++;
-						else if (straightLen == 5)
-							HandRanks["Straight5"]++;
-#endif
-						// POC new method
-						pocResults = PokerGame.PocNewMethodFor7Cards(hand);
-						foreach (string res in pocResults)
-							HandRanks2[res]++;
-
-						if (printHands)
-						{
-							foreach (Card card in hand)
-							{
-								Console.Write($"{card.Rank}{card.Suit} ");
-							}
-							//Console.Write($"{straightLen}_str8 ");
-							//Console.Write($"{flushLen}_flush ");
-							foreach (string res in pocResults)
-								Console.Write($"{res} ");
-							Console.WriteLine();
-						}
-						else if (iter % 50000 == 0)
-							Console.Write(".");
-
-						// Don't forget to return the cards to the deck when the hand is over!
-						deckOfCards.Return(hand);
-					}
 					Console.WriteLine();
 					Console.WriteLine("Simulation Results");
 					Console.WriteLine("==================");
@@ -361,25 +331,81 @@ namespace ConsoleSamples.Casino_Sample
 					Console.WriteLine("Hand Ranks");
 					Console.WriteLine("----------");
 					decimal percent;
-#if false
-					foreach (var key in HandRanks)
-					{
-						percent = Decimal.Divide(key.Value, numIterations);
-						Console.WriteLine($"{key.Key} [{percent:P1}] {key.Value}");
-					}
-					Console.WriteLine();
-#endif
 					Console.WriteLine("Using the new method");
-					var ordered = HandRanks2.OrderBy(x => x.Value);
+					Console.WriteLine($"Total number of results: {NumResults}");
+					Console.WriteLine($"Number of hands with 2 possible interpretations: {NumHandInterpretations[1]}");
+					Console.WriteLine($"Number of hands with 3 possible interpretations: {NumHandInterpretations[2]}");
+					var ordered = HandToIndex_7CardMash.OrderBy(x => HandRankCount[x.Value]);
 					foreach (var key in ordered)
 					{
-						percent = Decimal.Divide(key.Value, numIterations);
-						Console.WriteLine($"{key.Key,25} [{percent,5:P1}] {key.Value}");
+						percent = Decimal.Divide(HandRankCount[key.Value], NumResults);
+						Console.WriteLine($"{key.Key,25} [{percent,6:P1}] {HandRankCount[key.Value]}");
 					}
 					Console.WriteLine();
 				}
 			} while (!quit);
 		}
 
+		private void Simulate7CardMash(int numIterations, bool printHands, int threadNum)
+		{
+			Deck deckOfCards = new Deck();
+			List<Card> hand = new List<Card>();
+			List<string> pocResults;
+			int[] myHandRankCount = new int[HandToIndex_7CardMash.Count];
+			int myNumResults = 0;
+			int[] myNumHandInterpretations = new int[3];
+			for (int iter = 0; iter < numIterations; iter++)
+			{
+				// Create the hand.
+				deckOfCards.Shuffle();
+				hand.Add(deckOfCards.Deal());
+				hand.Add(deckOfCards.Deal());
+				hand.Add(deckOfCards.Deal());
+				hand.Add(deckOfCards.Deal());
+				hand.Add(deckOfCards.Deal());
+				hand.Add(deckOfCards.Deal());
+				hand.Add(deckOfCards.Deal());
+				hand.Sort();
+				hand.Reverse();
+
+				pocResults = PokerGame.PocNewMethodFor7Cards(hand);
+				myNumHandInterpretations[pocResults.Count - 1]++;
+
+				foreach (string res in pocResults)
+				{
+					myHandRankCount[HandToIndex_7CardMash[res]]++;
+					myNumResults++;
+				}
+
+				if (printHands)
+				{
+					string handOut = "";
+					foreach (Card card in hand)
+					{
+						handOut += $"{card.Rank}{card.Suit} ";
+					}
+					foreach (string res in pocResults)
+						handOut += $"{res} ";
+					Console.WriteLine($"{handOut}");
+				}
+				else if (iter % 50000 == 0)
+					Console.Write($"{threadNum}");
+
+				// Don't forget to return the cards to the deck when the hand is over!
+				deckOfCards.Return(hand);
+				hand.Clear();
+			}
+
+			// Update the various results accumulators.
+			Interlocked.Add(ref NumResults, myNumResults);
+			for (int i = 0; i < myHandRankCount.Length; i++)
+			{
+				Interlocked.Add(ref HandRankCount[i], myHandRankCount[i]);
+			}
+			for (int i = 0; i < NumHandInterpretations.Length; i++)
+			{
+				Interlocked.Add(ref NumHandInterpretations[i], myNumHandInterpretations[i]);
+			}
+		}
 	}
 }
