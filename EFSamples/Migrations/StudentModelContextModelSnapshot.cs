@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace EFSamples.Migrations
 {
     [DbContext(typeof(StudentModelContext))]
@@ -12,8 +14,7 @@ namespace EFSamples.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
 
             modelBuilder.Entity("EFSamples.StudentModel.Grade", b =>
                 {
@@ -102,6 +103,8 @@ namespace EFSamples.Migrations
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Grade");
                 });
 
             modelBuilder.Entity("EFSamples.StudentModel.StudentAddress", b =>
@@ -142,6 +145,10 @@ namespace EFSamples.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("StudentAddressId");
                         });
+
+                    b.Navigation("HomeAddress");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("EFSamples.StudentModel.StudentAddressFKAnnotation", b =>
@@ -182,6 +189,10 @@ namespace EFSamples.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("StudentAddressFKAnnotationId");
                         });
+
+                    b.Navigation("HomeAddress");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("EFSamples.StudentModel.StudentAddressUseFluent", b =>
@@ -222,6 +233,24 @@ namespace EFSamples.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("StudentAddressUseFluentId");
                         });
+
+                    b.Navigation("HomeAddress");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EFSamples.StudentModel.Grade", b =>
+                {
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("EFSamples.StudentModel.Student", b =>
+                {
+                    b.Navigation("Address");
+
+                    b.Navigation("AnnotationAddress");
+
+                    b.Navigation("FluentAddress");
                 });
 #pragma warning restore 612, 618
         }

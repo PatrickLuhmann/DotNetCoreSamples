@@ -5,17 +5,18 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace EFSamples.Migrations
 {
     [DbContext(typeof(StudentModelContext))]
-    [Migration("20200416164916_Mig-Grade")]
-    partial class MigGrade
+    [Migration("20220202000445_Migration-Student-Base")]
+    partial class MigrationStudentBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
 
             modelBuilder.Entity("EFSamples.StudentModel.Grade", b =>
                 {
@@ -59,25 +60,7 @@ namespace EFSamples.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("State")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ZipCode")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -93,24 +76,6 @@ namespace EFSamples.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("State")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.ToTable("StudentAddressFKAnnotations");
@@ -122,25 +87,7 @@ namespace EFSamples.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("State")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("StudentForeignKey")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ZipCode")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -158,6 +105,8 @@ namespace EFSamples.Migrations
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Grade");
                 });
 
             modelBuilder.Entity("EFSamples.StudentModel.StudentAddress", b =>
@@ -167,6 +116,41 @@ namespace EFSamples.Migrations
                         .HasForeignKey("EFSamples.StudentModel.StudentAddress", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("EFSamples.StudentModel.Address", "HomeAddress", b1 =>
+                        {
+                            b1.Property<int>("StudentAddressId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Address1")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Address2")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("City")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("State")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("ZipCode")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("StudentAddressId");
+
+                            b1.ToTable("StudentAddresses");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StudentAddressId");
+                        });
+
+                    b.Navigation("HomeAddress");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("EFSamples.StudentModel.StudentAddressFKAnnotation", b =>
@@ -176,6 +160,41 @@ namespace EFSamples.Migrations
                         .HasForeignKey("EFSamples.StudentModel.StudentAddressFKAnnotation", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("EFSamples.StudentModel.Address", "HomeAddress", b1 =>
+                        {
+                            b1.Property<int>("StudentAddressFKAnnotationId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Address1")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Address2")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("City")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("State")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("ZipCode")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("StudentAddressFKAnnotationId");
+
+                            b1.ToTable("StudentAddressFKAnnotations");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StudentAddressFKAnnotationId");
+                        });
+
+                    b.Navigation("HomeAddress");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("EFSamples.StudentModel.StudentAddressUseFluent", b =>
@@ -185,6 +204,55 @@ namespace EFSamples.Migrations
                         .HasForeignKey("EFSamples.StudentModel.StudentAddressUseFluent", "StudentForeignKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("EFSamples.StudentModel.Address", "HomeAddress", b1 =>
+                        {
+                            b1.Property<int>("StudentAddressUseFluentId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Address1")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Address2")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("City")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("State")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("ZipCode")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("StudentAddressUseFluentId");
+
+                            b1.ToTable("StudentAddressUseFluents");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StudentAddressUseFluentId");
+                        });
+
+                    b.Navigation("HomeAddress");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EFSamples.StudentModel.Grade", b =>
+                {
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("EFSamples.StudentModel.Student", b =>
+                {
+                    b.Navigation("Address");
+
+                    b.Navigation("AnnotationAddress");
+
+                    b.Navigation("FluentAddress");
                 });
 #pragma warning restore 612, 618
         }

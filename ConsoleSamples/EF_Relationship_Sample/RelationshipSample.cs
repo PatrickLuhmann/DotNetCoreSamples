@@ -14,7 +14,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			Console.WriteLine();
 
 			// Create our database context.
-			using StudentModelContext Context = new StudentModelContext();
+			using StudentModelContext Context = new StudentModelContext("students_sample.db");
 			Context.Database.Migrate();
 			int numChanged = 0;
 
@@ -49,7 +49,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			{
 				StudentName = "John",
 				// Specify Grade in the Student.
-				Grade = theGrades[0],
+				Grade = grade1,
 			};
 			Context.Students.Add(s1);
 			numChanged = Context.SaveChanges();
@@ -206,7 +206,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			// We are done with Context.
 			Context.Dispose();
 			// Use a new Context to make sure we are seeing what is in the database.
-			using StudentModelContext ContextAfter = new StudentModelContext();
+			using StudentModelContext ContextAfter = new StudentModelContext("students_sample.db");
 
 			Console.WriteLine();
 			Console.WriteLine("==============");
