@@ -30,7 +30,7 @@ namespace ConsoleSamples.EF_Relationship_Sample
 			List<Grade> theGrades = Context.Grades.ToList();
 			Console.WriteLine($"Here are the existing grades");
 			Console.WriteLine($"============================");
-			foreach(Grade grade in theGrades)
+			foreach (Grade grade in theGrades)
 			{
 				Console.WriteLine($"[{grade.Id:D3}]  {grade.Name} - {grade.Section}");
 			}
@@ -205,20 +205,41 @@ namespace ConsoleSamples.EF_Relationship_Sample
 #endif
 			// We are done with Context.
 			Context.Dispose();
+
 			// Use a new Context to make sure we are seeing what is in the database.
-			using StudentModelContext ContextAfter = new StudentModelContext("students_sample.db");
+			int numStudents;
+			int numStudentAddresses;
+			int numStudentAddressesFKA;
+			int numStudentAddressesFluent;
+			int numGrades;
+			List<Student> students;
+			using (StudentModelContext ContextAfter = new StudentModelContext("students_sample.db"))
+			{
+				numStudents = ContextAfter.Students.ToList().Count;
+				numStudentAddresses = ContextAfter.StudentAddresses.Count();
+				numStudentAddressesFKA = ContextAfter.StudentAddressFKAnnotations.Count();
+				numStudentAddressesFluent = ContextAfter.StudentAddressFKAnnotations.Count();
+				numGrades = ContextAfter.Grades.ToList().Count();
+
+				theGrades = ContextAfter.Grades.ToList();
+				students = ContextAfter.Students
+					.Include(s => s.Address)
+					.Include(s => s.AnnotationAddress)
+					.Include(s => s.FluentAddress)
+					.ToList();
+
+			}
 
 			Console.WriteLine();
 			Console.WriteLine("==============");
 			Console.WriteLine("=   AFTER    =");
 			Console.WriteLine("==============");
-			Console.WriteLine($"Number of records in the Students table: {ContextAfter.Students.ToList().Count}.");
-			Console.WriteLine($"Number of records in the StudentAddresses table: {ContextAfter.StudentAddresses.Count()}.");
-			Console.WriteLine($"Number of records in the StudentAddressFKAnnotations table: {ContextAfter.StudentAddressFKAnnotations.Count()}.");
-			Console.WriteLine($"Number of records in the StudentAddressUseFluents table: {ContextAfter.StudentAddressUseFluents.Count()}.");
-			Console.WriteLine($"Number of records in the Grades table: {ContextAfter.Grades.ToList().Count}.");
+			Console.WriteLine($"Number of records in the Students table: {numStudents}.");
+			Console.WriteLine($"Number of records in the StudentAddresses table: {numStudentAddresses}.");
+			Console.WriteLine($"Number of records in the StudentAddressFKAnnotations table: {numStudentAddressesFKA}.");
+			Console.WriteLine($"Number of records in the StudentAddressUseFluents table: {numStudentAddressesFluent}.");
+			Console.WriteLine($"Number of records in the Grades table: {numGrades}.");
 
-			theGrades = ContextAfter.Grades.ToList();
 			Console.WriteLine($"Here are the grades");
 			Console.WriteLine($"===================");
 			foreach (Grade grade in theGrades)
@@ -227,11 +248,6 @@ namespace ConsoleSamples.EF_Relationship_Sample
 				Console.WriteLine($"       Number of students in this grade: {grade.Students.Count}");
 			}
 
-			List<Student> students = ContextAfter.Students
-				.Include(s => s.Address)
-				.Include(s => s.AnnotationAddress)
-				.Include(s => s.FluentAddress)
-				.ToList();
 			Console.WriteLine($"Here are the students");
 			Console.WriteLine($"=====================");
 			foreach (Student s in students)
