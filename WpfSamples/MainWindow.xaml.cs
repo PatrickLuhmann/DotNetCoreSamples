@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfSamples.Attached_Behavior.View;
-using WpfSamples.List_Sorting.View;
 using WpfSamples.Triggers.View;
 
 namespace WpfSamples
@@ -31,12 +30,6 @@ namespace WpfSamples
 		private void Behavior_Button_Click(object sender, RoutedEventArgs e)
 		{
 			var wnd = new Behaviors_View();
-			wnd.Show();
-		}
-
-		private void List_Sorting_Button_Click(object sender, RoutedEventArgs e)
-		{
-			var wnd = new Sorting_View();
 			wnd.Show();
 		}
 
