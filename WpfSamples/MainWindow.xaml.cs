@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfSamples.Attached_Behavior.View;
-using WpfSamples.Triggers.View;
 
 namespace WpfSamples
 {
@@ -30,12 +29,6 @@ namespace WpfSamples
 		private void Behavior_Button_Click(object sender, RoutedEventArgs e)
 		{
 			var wnd = new Behaviors_View();
-			wnd.Show();
-		}
-
-		private void Trigger_Button_Click(object sender, RoutedEventArgs e)
-		{
-			var wnd = new Trigger_View();
 			wnd.Show();
 		}
 	}
